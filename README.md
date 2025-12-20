@@ -8,6 +8,7 @@ This repo is dedicated to host all files related to the training and use of our 
 ├── README.md
 └── src
     ├── data
+    ├── models
     ├── environment.yml
     ├── notebooks
     ├── One_sentiment_analysis_model
@@ -21,6 +22,9 @@ Neste diretorio estao os notebooks utilizados para tratar os dados(ETL) e treina
 
 #### .src/data
 Este diretorio contem os arquivos fontes (datasets) utilizados no treinamento do modelo.
+
+#### .src/models
+Este diretorio contem os arquivos serializados resultado do treinamento dos modelos.
 
 #### .src/scripts
 Este diretorio contem qualquer scripts utilizados no projeto.
