@@ -18,6 +18,12 @@ Na raiz do projeto execute:
 source .venv/bin/activate
 ```
 
+### Instalar as dependencias do projeto
+Na raiz do projeto execute:
+```
+pip3 install -r requirements.txt
+```
+
 ### Desativar o ambiente virtual
 Na raiz do projeto execute:
 
