@@ -1,6 +1,31 @@
 # One_sentiment_analysis_model
 This repo is dedicated to host all files related to the training and use of our ML model.
 
+# Como inicializar o projeto
+Este projeto foi criado usando variaveis de ambiente virtual python, voce deve criar o seu `.venv` e instalar as dependencias necessárias para poder executar este projeto.
+
+### Criar um ambiente virtual python
+Na raiz do projeto execute:
+
+```
+python3 -m venv venv
+```
+
+### Ativar o ambiente virtual
+Na raiz do projeto execute:
+
+```
+source .venv/bin/activate
+```
+
+### Desativar o ambiente virtual
+Na raiz do projeto execute:
+
+```
+deactivate
+```
+
+
 # Como este repositorio esta organizado
 ```
 .
@@ -31,7 +56,8 @@ Neste diretorio estao os notebooks utilizados para tratar os dados(ETL) e treina
 
 #### .src/data
 Este diretorio contem os arquivos fontes (datasets) utilizados no treinamento do modelo.
-**[IMPORTANT]** *este diretorio esta exluido do versionamento pelo `.gitignore` pois os aruivos raw do dataset sao muito grandes para serem salvos no github. Voce deve baixar o dataset direto do [kaggle](https://www.kaggle.com/datasets/augustop/portuguese-tweets-for-sentiment-analysis/data) e extrair o dataset `NoThemeTweets.csv` neste diretorio.
+
+-**[IMPORTANT]** *este diretorio esta exluido do versionamento pelo `.gitignore` pois os aruivos raw do dataset sao muito grandes para serem salvos no github. Voce deve baixar o dataset direto do [kaggle](https://www.kaggle.com/datasets/augustop/portuguese-tweets-for-sentiment-analysis/data) e extrair o dataset `NoThemeTweets.csv` neste diretorio.
 
 #### .src/models
 Este diretorio contem os arquivos serializados resultado do treinamento dos modelos.
