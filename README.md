@@ -6,13 +6,22 @@ This repo is dedicated to host all files related to the training and use of our 
 .
 ├── LICENSE
 ├── README.md
+├── requirements.txt
 └── src
     ├── data
-    ├── models
+    │   └── NoThemeTweets.csv
     ├── environment.yml
+    ├── models
+    │   ├── dtrUCV_model.pkl
+    │   ├── dtrUIDF_model.pkl
+    │   ├── mnbUCV_model.pkl
+    │   ├── rfcUCV_model.pkl
+    │   └── rfcUIDF_model.pkl
     ├── notebooks
+    │   └── 00_One_sentiment_analysis_model.ipynb
     ├── One_sentiment_analysis_model
     └── scripts
+        └── string_analysis.py
 ```
 
 Os arquivos relacionados ao projeto em si estao organizados na pasat `src`, arquivos de documentacao e adjacentes devem estar em um nivel acime fora da do diretorio `src`.
@@ -22,6 +31,7 @@ Neste diretorio estao os notebooks utilizados para tratar os dados(ETL) e treina
 
 #### .src/data
 Este diretorio contem os arquivos fontes (datasets) utilizados no treinamento do modelo.
+**[IMPORTANT]** *este diretorio esta exluido do versionamento pelo `.gitignore` pois os aruivos raw do dataset sao muito grandes para serem salvos no github. Voce deve baixar o dataset direto do [kaggle](https://www.kaggle.com/datasets/augustop/portuguese-tweets-for-sentiment-analysis/data) e extrair o dataset `NoThemeTweets.csv` neste diretorio.
 
 #### .src/models
 Este diretorio contem os arquivos serializados resultado do treinamento dos modelos.
@@ -39,13 +49,13 @@ Este diretorio é o diretorio `main` do projeto, onde deve estar os arquivos pri
  
 * Exploração e limpeza dos dados (EDA);
  
-* Transformação dos textos em números com TF-IDF;
+* ~~Transformação dos textos em números com TF-IDF;~~
  
-* Treinamento de modelo supervisionado (ex.: Logistic Regression, Naive Bayes);
+* ~~Treinamento de modelo supervisionado (ex.: Logistic Regression, Naive Bayes);~~
  
 * Métricas de desempenho (Acurácia, Precisão, Recall, F1-score);
 
-* Serialização do modelo (joblib/pickle).
+* ~~Serialização do modelo (joblib/pickle).~~
 
 #### Time de Data Science
 
