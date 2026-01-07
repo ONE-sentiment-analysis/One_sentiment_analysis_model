@@ -119,4 +119,7 @@ Recomendamos definir desde o início o formato JSON de entrada e saída. Segue u
 
 ---
 
-Para referencia de que padrao este repositorio segue veja aqui: [How to organize your Python data science project](https://gist.github.com/ericmjl/27e50331f24db3e8f957d1fe7bbbe510)
+Para referencia de que padrao este repositorio segue veja aqui:
+
+- [How to organize your Python data science project](https://gist.github.com/ericmjl/27e50331f24db3e8f957d1fe7bbbe510)
+- [Empacotando projetos Python](https://packaging.python.org/pt-br/latest/tutorials/packaging-projects/)
