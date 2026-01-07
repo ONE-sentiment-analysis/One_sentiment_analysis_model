@@ -12,7 +12,6 @@ from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.metrics import accuracy_score
-from sklearn.feature_extraction.text import HashingVectorizer
 
 
 parser = argparse.ArgumentParser(description="Calculate sentiment of given satring.")
@@ -23,7 +22,6 @@ args = parser.parse_args()
 # Preparando a string recebida para analise
 df = pd.DataFrame([args.string], columns=['text'])
 lb = LabelEncoder()
-# df['text'] = lb.fit_transform(df['text'])
 nlp = spacy.load("pt_core_news_sm")
 nltk.download('stopwords')
 nltk.download('wordnet')
@@ -46,7 +44,6 @@ for phrase in tokenization:
   new_text.append(new_phrase[:-1])
 
 df["text"] = new_text
-# df['text'] = lb.fit_transform(df['text'])
 
 
 
@@ -56,13 +53,11 @@ with open('src/models/rfcUCV_model.pkl', 'rb') as file:
 
 def main():
     # Carregando o vetorizer salvo
-    # with open('src/models/tfidf_vectorizer.pkl', 'rb') as file:
-    #     vectorizer = pickle.load(file)
-    # vectorizer = HashingVectorizer(ngram_range=(1,1), use_idf=True, norm='l2', stop_words=stop_words)
-    vectorizer = HashingVectorizer(n_features=2**4, norm='l2', stop_words=stop_words)
+    with open('src/models/vect_uni_cv.pkl', 'rb') as file:
+        vectorizer = pickle.load(file)
+    
 
     # Transformando a string de entrada
-    vectorizer.fit(df['text'])
     X_input = vectorizer.transform(df['text'])
 
     # Fazendo a predição
