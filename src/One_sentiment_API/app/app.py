@@ -1,5 +1,6 @@
 from fastapi import FastAPI, HTTPException
-from app.schemas import SentimentRequest
+from app.schemas import SentimentRequest, SentimentResponse, MLModels
+from app.predict import main as predict_main
 
 app = FastAPI()
 
@@ -9,13 +10,20 @@ def welcome():
 
 @app.get("/models")
 def list_models():
-    return {"models": ["dummy-sentiment-model-v1"]}
+    return {"available_models": [model.value for model in MLModels]}
 
 @app.post("/predict_sentiment")
-def predict_sentiment(request: SentimentRequest) -> SentimentRequest:
+def predict_sentiment(request: SentimentRequest) -> SentimentResponse:
     text = request.text
+    model = request.model
     if not text:
         raise HTTPException(status_code=400, detail="Text input is required.")
-    # Dummy sentiment analysis logic
-    sentiment = "positive" if "good" in text.lower() else "negative"
-    return {"text": text, "sentiment": sentiment}
+    sentiment, score = predict_main(text, model)
+    response = SentimentResponse(
+        text=text,
+        sentiment=sentiment,
+        model=model,
+        score=score
+    )
+    return response
+
