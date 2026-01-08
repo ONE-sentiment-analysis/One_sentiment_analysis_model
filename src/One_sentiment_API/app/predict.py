@@ -1,3 +1,4 @@
+from pathlib import Path
 import pickle
 import pandas as pd
 import nltk
@@ -9,6 +10,10 @@ from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.metrics import accuracy_score
+
+
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
+
 
 
 def load_new_string(input_string: str):
@@ -38,23 +43,35 @@ def load_new_string(input_string: str):
     df["text"] = new_text
     return df
 
+
+
 def load_model(model: str):
-    match model:
-        case 'RandomForestClassifier' | 'rfcUCV':
-            model_path = 'src/models/rfcUCV_model.pkl'
-        case 'DecisionTreeClassifier' | 'dtcUCV':
-            model_path = 'src/models/dtcUCV_model.pkl'
-        case 'LogisticRegression' | 'lrUIDF':
-            model_path = 'src/models/lrUCV_model.pkl'
-        case 'MultinomialNB' | 'mnbUIDF':
-            model_path = 'src/models/mnbUIDF_model.pkl'
-    
-    with open(model_path, 'rb') as file:
+    models_dir = BASE_DIR / "models"
+    mapping = {
+        'LogisticRegression': 'lrUCV_model.pkl',
+        'lrUCV': 'lrUCV_model.pkl',
+        'DecisionTreeClassifier': 'dtrUCV_model.pkl',
+        'dtcUCV': 'dtrUCV_model.pkl',
+        'RandomForestClassifier': 'rfcUCV_model.pkl',
+        'rfcUCV': 'rfcUCV_model.pkl',
+        'MultinomialNB': 'mnbUCV_model.pkl',
+        'mnbUCV': 'mnbUCV_model.pkl',
+    }
+    filename = mapping.get(model)
+    if filename is None:
+        raise ValueError(f"Unknown model '{model}'. Available: {list(mapping.keys())}")
+    model_path = models_dir / filename
+    if not model_path.exists():
+        raise FileNotFoundError(f"Model file not found: {model_path}")
+    with model_path.open('rb') as file:
         loaded_model = pickle.load(file)
     return loaded_model
 
 def load_vectorizer(vectorizer_path: str):
-    with open(vectorizer_path, 'rb') as file:
+    vectorizer_path = Path(vectorizer_path)
+    if not vectorizer_path.exists():
+        raise FileNotFoundError(f"Vectorizer file not found: {vectorizer_path}")
+    with vectorizer_path.open('rb') as file:
         vectorizer = pickle.load(file)
     return vectorizer
 
@@ -63,19 +80,20 @@ def transform_input(df: pd.DataFrame, vectorizer) -> any:
     X_input = vectorizer.transform(df['text'])
     return X_input
 
-def predict_sentiment(model, X_input) -> str:
+def predict_sentiment(model, X_input):
     prediction = model.predict(X_input)
     sentiment = "positive" if prediction[0] == 1 else "negative"
     accuracy_score = model.score(X_input, prediction)
-    return sentiment, accuracy_score
+    return prediction, sentiment, accuracy_score
 
 def main(string: str, model: str):
     df = load_new_string(string)
     model = load_model(model)
-    vectorizer = load_vectorizer('src/models/vect_uni_cv.pkl')
+    vectorizer = load_vectorizer(BASE_DIR / 'models' / 'vect_uni_cv.pkl')
     X_input = transform_input(df, vectorizer)
-    sentiment, score = predict_sentiment(model, X_input)
-    print(f'Sentiment: {sentiment}, Score: {score:.2f}')
+    prediction, sentiment, score = predict_sentiment(model, X_input)
+    print(f'Sentiment: {sentiment}, Score: {score:.2f}, Prediction: {prediction[0]}')
+    return sentiment, score
 
 
 if __name__ == "__main__":
