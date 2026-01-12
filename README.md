@@ -51,19 +51,37 @@ deactivate
 ├── requirements.txt
 └── src
     ├── data
+    │   ├── kaggle
+    │   │   └── working
+    │   │       └── nltk_data
+    │   │           └── corpora
+    │   │               └── wordnet.zip
     │   └── NoThemeTweets.csv
     ├── environment.yml
     ├── models
     │   ├── dtrUCV_model.pkl
     │   ├── dtrUIDF_model.pkl
+    │   ├── lrUCV_model.pkl
+    │   ├── lrUIDF_model.pkl
     │   ├── mnbUCV_model.pkl
+    │   ├── mnbUIDF_model.pkl
     │   ├── rfcUCV_model.pkl
-    │   └── rfcUIDF_model.pkl
+    │   ├── rfcUIDF_model.pkl
+    │   ├── vect_uni_cv.pkl
+    │   └── vect_uni_idf.pkl
     ├── notebooks
     │   └── 00_One_sentiment_analysis_model.ipynb
-    ├── One_sentiment_analysis_model
+    ├── One_sentiment_API
+    │   ├── app
+    │   │   ├── app.py
+    │   │   ├── predict.py
+    │   │   ├── __pycache__
+    │   │   │   └── app.cpython-313.pyc
+    │   │   └── schemas.py
+    │   └── main.py
     └── scripts
         └── string_analysis.py
+
 ```
 
 Os arquivos relacionados ao projeto em si estao organizados na pasat `src`, arquivos de documentacao e adjacentes devem estar em um nivel acime fora da do diretorio `src`.
@@ -82,35 +100,27 @@ Este diretorio contem os arquivos serializados resultado do treinamento dos mode
 #### .src/scripts
 Este diretorio contem qualquer scripts utilizados no projeto.
 
-#### .src/One_sentiment_analysis_model
-Este diretorio é o diretorio `main` do projeto, onde deve estar os arquivos principais do projeto que utilizarao o modelo treinado.
+#### .src/One_sentiment_API
+Este diretorio contem o backend FastAPI para fazer integracao com o backend Java.
 
 ---
 # TO-DO
 
 * Notebook (Jupyter/Colab) do time de Data Science contendo:
- 
-* Exploração e limpeza dos dados (EDA);
- 
-* ~~Transformação dos textos em números com TF-IDF;~~
- 
-* ~~Treinamento de modelo supervisionado (ex.: Logistic Regression, Naive Bayes);~~
- 
-* Métricas de desempenho (Acurácia, Precisão, Recall, F1-score);
-
-* ~~Serialização do modelo (joblib/pickle).~~
+* &#x2610; Exploração ~~e limpeza dos dados~~ (EDA);
+* &#x2611; ~~Transformação dos textos em números com TF-IDF;~~
+* &#x2611; ~~Treinamento de modelo supervisionado (ex.: Logistic Regression, Naive Bayes);~~
+* &#x2610; Métricas de desempenho (Acurácia, Precisão, Recall, F1-score);
+* &#x2611; ~~Serialização do modelo (joblib/pickle).~~
 
 #### Time de Data Science
 
 Cada equipe deve escolher ou montar seu próprio conjunto de dados de comentários, avaliações ou postagens que possam ser usados para análise de sentimento (ex.: reviews públicos, tweets, avaliações de produtos etc.).
 
-* use Python, Pandas para ler/limpar dados;
-
-* crie um modelo simples (TF-IDF + LogisticRegression do scikit-learn);
-
-* salve o pipeline e o modelo com joblib.dump.
-
-* Coloque tudo em um notebook bem comentado.
+- [x] use Python, Pandas para ler/limpar dados; &check;
+- [x] crie um modelo simples (TF-IDF + LogisticRegression do scikit-learn); &check;
+- [x] salve o pipeline e o modelo com joblib.dump. &check;
+- [x] Coloque tudo em um notebook bem comentado. &check;
 
 #### Contrato de integração (definido entre DS e BE)
 
@@ -130,7 +140,14 @@ Recomendamos definir desde o início o formato JSON de entrada e saída. Segue u
 
 ---
 
-Para referencia de que padrao este repositorio segue veja aqui:
-
+### Useful resources
 - [How to organize your Python data science project](https://gist.github.com/ericmjl/27e50331f24db3e8f957d1fe7bbbe510)
 - [Empacotando projetos Python](https://packaging.python.org/pt-br/latest/tutorials/packaging-projects/)
+- [Solving “The tf-idf vectorizer is not fitted” Error: Troubleshooting Guide](https://mljourney.com/solving-the-tf-idf-vectorizer-is-not-fitted-error-troubleshooting-guide/)
+- [Machine Learning 101: CountVectorizer vs TFIDFVectorizer](https://enjoymachinelearning.com/blog/countvectorizer-vs-tfidfvectorizer/)
+- [TF-IDF Vectorizer vs CountVectorizer](https://mljourney.com/tf-idf-vectorizer-vs-countvectorizer/)
+- [FastAPI Tutorial](https://www.geeksforgeeks.org/python/fastapi-tutorial/)
+- [FastAPI documentation](https://fastapi-tutorial.readthedocs.io/en/latest/)
+- [Building Web APIs with FastAPI: A Beginner's Guide](https://betterstack.com/community/guides/scaling-python/introduction-to-fastapi/)
+- [Build Command-Line Interfaces With Python's argparse](https://realpython.com/command-line-interfaces-python-argparse/)
+- [Saving a machine learning Model](https://www.geeksforgeeks.org/machine-learning/saving-a-machine-learning-model/)
