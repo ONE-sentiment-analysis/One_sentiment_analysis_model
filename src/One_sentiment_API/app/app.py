@@ -8,11 +8,11 @@ app = FastAPI()
 def welcome():
 	return {"message": "Welcome to the One Sentiment API!"}
 
-@app.get("/models")
+@app.get("/api/models")
 def list_models():
     return {"available_models": [model.value for model in MLModels]}
 
-@app.post("/predict_sentiment")
+@app.post("/api/predict_sentiment")
 def predict_sentiment(request: SentimentRequest) -> SentimentResponse:
     text = request.text
     model = request.model

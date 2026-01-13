@@ -12,37 +12,6 @@
 # One_sentiment_analysis_model
 This repo is dedicated to host all files related to the training and use of our ML model.
 
-# Como inicializar o projeto
-Este projeto foi criado usando variaveis de ambiente virtual python, voce deve criar o seu `.venv` e instalar as dependencias necessárias para poder executar este projeto.
-
-### Criar um ambiente virtual python
-Na raiz do projeto execute:
-
-```
-python3 -m venv venv
-```
-
-### Ativar o ambiente virtual
-Na raiz do projeto execute:
-
-```
-source .venv/bin/activate
-```
-
-### Instalar as dependencias do projeto
-Na raiz do projeto execute:
-```
-pip3 install -r requirements.txt
-```
-
-### Desativar o ambiente virtual
-Na raiz do projeto execute:
-
-```
-deactivate
-```
-
-
 # Como este repositorio esta organizado
 ```
 .
@@ -103,6 +72,135 @@ Este diretorio contem qualquer scripts utilizados no projeto.
 #### .src/One_sentiment_API
 Este diretorio contem o backend FastAPI para fazer integracao com o backend Java.
 
+# Como inicializar o projeto
+Este projeto foi criado usando variaveis de ambiente virtual python, voce deve criar o seu `.venv` e instalar as dependencias necessárias para poder executar este projeto.
+
+### Criar um ambiente virtual python
+Na raiz do projeto execute:
+
+```
+python3 -m venv venv
+```
+
+### Ativar o ambiente virtual
+Na raiz do projeto execute:
+
+```
+source .venv/bin/activate
+```
+
+### Instalar as dependencias do projeto
+Na raiz do projeto execute:
+```
+pip3 install -r requirements.txt
+```
+
+### Desativar o ambiente virtual
+Na raiz do projeto execute:
+
+```
+deactivate
+```
+
+## API Python - FastAPI
+
+### Como executar a API
+O diretorio raiz da api se encontra em `/src/One_sentiment_API`. Navegue até este diretorio e execute o seguinte comando para iniciar a API:
+
+```
+python3 main.py
+```
+
+### Endpoints fornecidos pela API
+
+#### /api/docs
+Documentacao detalhada da API.
+
+#### /api/models
+
+##### Parameters
+
+No parameters
+
+##### Responses
+
+Code|Description
+:---:|:---:
+200|Successful Response
+
+##### Response Body
+
+```
+{
+  "available_models": [
+    "RandomForestClassifier",
+    "DecisionTreeClassifier",
+    "LogisticRegression",
+    "MultinomialNB"
+  ]
+}
+```
+
+##### Response headers
+
+```
+ content-length: 109  
+ content-type: application/json  
+ date: Tue,13 Jan 2026 20:26:55 GMT  
+ server: uvicorn 
+```
+
+#### /api/predict_sentiment
+
+##### Parameters
+
+No parameters
+
+##### Request body *required
+
+##### Example value
+```
+{
+  "text": "Lorem ipsum dolor sit amet. ",
+  "model": "LogisticRegression"
+}
+```
+
+##### Responses
+Code|Description
+:---:|:---:
+200|Successful Response
+
+##### Example value
+```
+{
+  "text": "Lorem ipsum dolor sit amet. ",
+  "sentiment": "Positive",
+  "model": "LogisticRegression",
+  "score": 0.99
+}
+```
+
+Code|Description
+:---:|:---:
+422|Validation Error
+
+##### Example value
+```
+{
+  "detail": [
+    {
+      "loc": [
+        "string",
+        0
+      ],
+      "msg": "string",
+      "type": "string"
+    }
+  ]
+}
+```
+
 ---
 # TO-DO
 
@@ -151,3 +249,6 @@ Recomendamos definir desde o início o formato JSON de entrada e saída. Segue u
 - [Building Web APIs with FastAPI: A Beginner's Guide](https://betterstack.com/community/guides/scaling-python/introduction-to-fastapi/)
 - [Build Command-Line Interfaces With Python's argparse](https://realpython.com/command-line-interfaces-python-argparse/)
 - [Saving a machine learning Model](https://www.geeksforgeeks.org/machine-learning/saving-a-machine-learning-model/)
+- [What is Sentiment Analysis?](https://www.youtube.com/watch?v=5HQCNAsSO-s)
+- [
+Training a model to recognize sentiment in text (NLP Zero to Hero)](https://www.youtube.com/watch?v=Y_hzMnRXjhI)
