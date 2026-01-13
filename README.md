@@ -220,21 +220,6 @@ Cada equipe deve escolher ou montar seu próprio conjunto de dados de comentári
 - [x] salve o pipeline e o modelo com joblib.dump. &check;
 - [x] Coloque tudo em um notebook bem comentado. &check;
 
-#### Contrato de integração (definido entre DS e BE)
-
-Recomendamos definir desde o início o formato JSON de entrada e saída. Segue um exemplo:
-
-```
-{"text": "…"} →
-
-{
-
-"previsao":"Positivo",
-
-"probabilidade":0.9
-
-} 
-```
 
 ---
 
