@@ -20,7 +20,7 @@ COPY src/models/ ./models/
 # Variável de ambiente para ajudar a API a localizar os modelos
 ENV PYTHONPATH=/app
 
-# Expor a porta que a API utiliza (ex: 5000 para Flask)
+# Expor a porta que a API utiliza
 EXPOSE 8585
 
 # Comando para rodar a API
