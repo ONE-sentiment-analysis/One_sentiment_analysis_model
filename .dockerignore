@@ -1,0 +1,6 @@
+venv/
+.git/
+src/logs/
+__pycache__/
+*.pkl
+.env
