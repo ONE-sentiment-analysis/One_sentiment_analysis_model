@@ -27,13 +27,13 @@ logging.basicConfig(
 nltk.download('stopwords', quiet=True)
 stops = set(stopwords.words('portuguese'))
 
-def limpar_texto(texto):
+def limpar_texto(texto: str) -> str:
     texto = str(texto).lower()
     texto = re.sub(r'[^a-zA-Záéíóúàèìòùâêîôûãõç\s]', '', texto)
     texto = ' '.join([palavra for palavra in texto.split() if palavra not in stops])
     return texto
 
-def carregar_recursos(nome_modelo):
+def carregar_recursos(nome_modelo: str) -> tuple:
     try:
         modelos_disponiveis = {
             'nb': 'modelo_naive_bayes.joblib',

@@ -1,99 +1,72 @@
-from pathlib import Path
-import pickle
-import pandas as pd
+import argparse
+import re
 import nltk
-from nltk.stem import WordNetLemmatizer
-import spacy
-from sklearn.preprocessing import LabelEncoder
-from sklearn.feature_extraction.text import TfidfVectorizer, CountVectorizer
-from sklearn.model_selection import train_test_split
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.tree import DecisionTreeClassifier
-from sklearn.metrics import accuracy_score
+import logging
+from pathlib import Path
+from nltk.corpus import stopwords
+from joblib import load
+import sys
 
+# configuracao de caminhos com pathlib
+BASE_DIR = Path(__file__).parent.parent.parent # vai para /src
+MODELS_DIR = BASE_DIR / "models"
+LOGS_DIR = BASE_DIR / "logs"
 
-BASE_DIR = Path(__file__).resolve().parent.parent.parent
+# criar a pasta de logs caso ela nao exista
+LOGS_DIR.mkdir(exist_ok=True)
 
+# configuracao do logging
+logging.basicConfig(
+    filename=LOGS_DIR / "execucao_API.log",
+    level=logging.INFO,
+    format="%(asctime)s - %(levelname)s - Modelo: %(message)s",
+    datefmt="%Y-%m-%d %H:%M:%S"
+)
 
+# configuracao NLTK
+nltk.download('stopwords', quiet=True)
+stops = set(stopwords.words('portuguese'))
 
-def load_new_string(input_string: str):
-    # Preparando a string recebida para analise
-    df = pd.DataFrame([input_string], columns=['text'])
-    nlp = spacy.load("pt_core_news_sm")
-    nltk.download('stopwords')
-    nltk.download('wordnet')
-    stop_words = nltk.corpus.stopwords.words('portuguese')
-    working_text = df["text"]
-    tokenization = [nlp(text.lower()) for text in working_text]
-    nltk.download('wordnet', download_dir='../data/kaggle/working/nltk_data')
-    nltk.data.path.append("../data/kaggle/working/nltk_data")
+def limpar_texto(texto: str) -> str:
+    texto = str(texto).lower()
+    texto = re.sub(r'[^a-zA-Záéíóúàèìòùâêîôûãõç\s]', '', texto)
+    texto = ' '.join([palavra for palavra in texto.split() if palavra not in stops])
+    return texto
 
-    from nltk.stem import PorterStemmer
-    ps = PorterStemmer()
+def carregar_recursos(nome_modelo: str) -> tuple:
+    try:
+        modelos_disponiveis = {
+            'nb': 'modelo_naive_bayes.joblib',
+            'lr': 'modelo_logistic_regression.joblib',
+            'rf': 'modelo_random_forest.joblib'
+        }
+        
+        caminho_modelo = MODELS_DIR / modelos_disponiveis[nome_modelo]
+        caminho_vetorizador = MODELS_DIR / 'vectorizer_tfidf.joblib'
 
-    # aplicando stemming e removendo stop words, pontuações, mentions e links
-    new_text = []
-    for phrase in tokenization:
-        new_phrase = ""
-        for token in phrase:
-            if not str(token) in stop_words and not token.is_punct and "@" not in str(token) and "http" not in str(token):
-                new_phrase += ps.stem(str(token)) + " "
-        new_text.append(new_phrase[:-1])
+        return load(caminho_modelo), load(caminho_vetorizador)
+    except Exception as e:
+        logging.error(f"Erro ao carregar recursos: {e}")
+        print(f"Erro crítico: Verifique os logs em {LOGS_DIR}")
+        sys.exit(1)
 
-    df["text"] = new_text
-    return df
+def main(text: str, model: str) -> tuple:
+    
+    modelo, vectorizer = carregar_recursos(model)
+    
+    texto_limpo = limpar_texto(text)
+    vetorizado = vectorizer.transform([texto_limpo])
+    
+    predicao = modelo.predict(vetorizado)[0]
+    probabilidade = modelo.predict_proba(vetorizado).max()
 
+    # logando a execucao
+    log_msg = f"{model.upper()} | Texto: '{text}' | Predição: {predicao} | Confiança: {probabilidade:.2%}"
+    logging.info(log_msg)
 
-
-def load_model(model: str):
-    models_dir = BASE_DIR / "models"
-    mapping = {
-        'LogisticRegression': 'lrUCV_model.pkl',
-        'lrUCV': 'lrUCV_model.pkl',
-        'DecisionTreeClassifier': 'dtrUCV_model.pkl',
-        'dtcUCV': 'dtrUCV_model.pkl',
-        'RandomForestClassifier': 'rfcUCV_model.pkl',
-        'rfcUCV': 'rfcUCV_model.pkl',
-        'MultinomialNB': 'mnbUCV_model.pkl',
-        'mnbUCV': 'mnbUCV_model.pkl',
-    }
-    filename = mapping.get(model)
-    if filename is None:
-        raise ValueError(f"Unknown model '{model}'. Available: {list(mapping.keys())}")
-    model_path = models_dir / filename
-    if not model_path.exists():
-        raise FileNotFoundError(f"Model file not found: {model_path}")
-    with model_path.open('rb') as file:
-        loaded_model = pickle.load(file)
-    return loaded_model
-
-def load_vectorizer(vectorizer_path: str):
-    vectorizer_path = Path(vectorizer_path)
-    if not vectorizer_path.exists():
-        raise FileNotFoundError(f"Vectorizer file not found: {vectorizer_path}")
-    with vectorizer_path.open('rb') as file:
-        vectorizer = pickle.load(file)
-    return vectorizer
-
-def transform_input(df: pd.DataFrame, vectorizer) -> any:
-    # Transformando a string de entrada
-    X_input = vectorizer.transform(df['text'])
-    return X_input
-
-def predict_sentiment(model, X_input):
-    prediction = model.predict(X_input)
-    sentiment = "positive" if prediction[0] == 1 else "negative"
-    accuracy_score = model.score(X_input, prediction)
-    return prediction, sentiment, accuracy_score
-
-def main(string: str, model: str):
-    df = load_new_string(string)
-    model = load_model(model)
-    vectorizer = load_vectorizer(BASE_DIR / 'models' / 'vect_uni_cv.pkl')
-    X_input = transform_input(df, vectorizer)
-    prediction, sentiment, score = predict_sentiment(model, X_input)
-    print(f'Sentiment: {sentiment}, Score: {score:.2f}, Prediction: {prediction[0]}')
-    return sentiment, score
+    # output para o usuario
+    print(f"\nResultado ({model.upper()}): {predicao} ({probabilidade:.2%})")
+    return predicao, probabilidade
 
 
 if __name__ == "__main__":

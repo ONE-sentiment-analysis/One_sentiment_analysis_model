@@ -12,7 +12,7 @@ def welcome():
 def list_models():
     return {"available_models": [model.value for model in MLModels]}
 
-@app.post("/api/predict_sentiment")
+@app.post("/api/predict")
 def predict_sentiment(request: SentimentRequest) -> SentimentResponse:
     text = request.text
     model = request.model

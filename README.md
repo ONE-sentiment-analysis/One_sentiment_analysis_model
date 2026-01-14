@@ -16,28 +16,23 @@ This repo is dedicated to host all files related to the training and use of our 
 ```
 .
 ├── LICENSE
+├── logs
+│   └── execucao.log
 ├── README.md
 ├── requirements.txt
 └── src
     ├── data
-    │   ├── kaggle
-    │   │   └── working
-    │   │       └── nltk_data
-    │   │           └── corpora
-    │   │               └── wordnet.zip
-    │   └── NoThemeTweets.csv
+    │   └── olist_order_reviews_dataset.csv
     ├── environment.yml
+    ├── logs
+    │   ├── execucao_API.log
+    │   └── execucao.log
     ├── models
-    │   ├── dtrUCV_model.pkl
-    │   ├── dtrUIDF_model.pkl
-    │   ├── lrUCV_model.pkl
-    │   ├── lrUIDF_model.pkl
-    │   ├── mnbUCV_model.pkl
-    │   ├── mnbUIDF_model.pkl
-    │   ├── rfcUCV_model.pkl
-    │   ├── rfcUIDF_model.pkl
-    │   ├── vect_uni_cv.pkl
-    │   └── vect_uni_idf.pkl
+    │   ├── modelo_logistic_regression.joblib
+    │   ├── modelo_naive_bayes.joblib
+    │   ├── modelo_random_forest.joblib
+    │   ├── vectorizer.joblib
+    │   └── vectorizer_tfidf.joblib
     ├── notebooks
     │   └── 00_One_sentiment_analysis_model.ipynb
     ├── One_sentiment_API
@@ -45,11 +40,20 @@ This repo is dedicated to host all files related to the training and use of our 
     │   │   ├── app.py
     │   │   ├── predict.py
     │   │   ├── __pycache__
-    │   │   │   └── app.cpython-313.pyc
+    │   │   │   ├── app.cpython-313.pyc
+    │   │   │   ├── predict.cpython-313.pyc
+    │   │   │   └── schemas.cpython-313.pyc
     │   │   └── schemas.py
-    │   └── main.py
+    │   ├── main.py
+    │   └── __pycache__
+    │       └── main.cpython-313.pyc
+    ├── resources
+    │   └── img
+    │       ├── .
+    │       ├── .
+    │       └── .
     └── scripts
-        └── string_analysis.py
+        └── classificador.py
 
 ```
 
@@ -111,12 +115,26 @@ O diretorio raiz da api se encontra em `/src/One_sentiment_API`. Navegue até es
 python3 main.py
 ```
 
+### Porta
+Por padrao a API esta configurada para ouvir chamadas na porta `8585`.
+
+Se desejar alterar a porta, altere o atributo `port=` no seguinte arquivo:
+
+```
+./src/One_sentiment_API/main.py
+```
+
 ### Endpoints fornecidos pela API
 
 #### /api/docs
 Documentacao detalhada da API.
 
 #### /api/models
+exemplo de teste:
+
+```
+curl -i -X GET http://127.0.0.1:8585/api/models
+```
 
 ##### Parameters
 
@@ -133,10 +151,9 @@ Code|Description
 ```
 {
   "available_models": [
-    "RandomForestClassifier",
-    "DecisionTreeClassifier",
-    "LogisticRegression",
-    "MultinomialNB"
+    "nb",
+    "lr",
+    "rf"
   ]
 }
 ```
@@ -150,7 +167,12 @@ Code|Description
  server: uvicorn 
 ```
 
-#### /api/predict_sentiment
+#### /api/predict
+exemplo de teste:
+
+```
+curl -i -X POST -H 'Content-Type: application/json' -d '{"text": "O atendimento foi nao  taobom", "model": "lr"}' http://127.0.0.1:8585/api/predict
+```
 
 ##### Parameters
 
@@ -162,9 +184,11 @@ No parameters
 ```
 {
   "text": "Lorem ipsum dolor sit amet. ",
-  "model": "LogisticRegression"
+  "model": "lr"
 }
 ```
+
+O campo "model" é opcional, se deixado em branco a API ira utilizar o modelo padrão(default) que é o modelo "lr" ou seja Regressão Logistica.
 
 ##### Responses
 Code|Description
