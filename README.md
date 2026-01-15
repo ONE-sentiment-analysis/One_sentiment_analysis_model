@@ -66,7 +66,15 @@ Neste diretorio estao os notebooks utilizados para tratar os dados(ETL) e treina
 #### .src/data
 Este diretorio contem os arquivos fontes (datasets) utilizados no treinamento do modelo.
 
--**[IMPORTANT]** *este diretorio esta exluido do versionamento pelo `.gitignore` pois os aruivos raw do dataset sao muito grandes para serem salvos no github. Voce deve baixar o dataset direto do [kaggle](https://www.kaggle.com/datasets/augustop/portuguese-tweets-for-sentiment-analysis/data) e extrair o dataset `NoThemeTweets.csv` neste diretorio.
+-**[IMPORTANT]** *este diretorio esta exluido do versionamento pelo `.gitignore` pois os aruivos raw do dataset sao muito grandes para serem salvos no github. Voce deve baixar o dataset direto do kaggle na seguinte URL: [https://www.kaggle.com/api/v1/datasets/download/olistbr/brazilian-ecommerce](https://www.kaggle.com/api/v1/datasets/download/olistbr/brazilian-ecommerce).
+
+Apos o download extraia o arquivo `.zip` e coloque o arquivo `olist_order_reviews_dataset.csv` no diretorio `src/data` deste projeto.
+
+O caminho do final do arquivo ficara assim:
+
+```
+src/data/olist_order_reviews_dataset.csv
+```
 
 #### .src/models
 Este diretorio contem os arquivos serializados resultado do treinamento dos modelos.

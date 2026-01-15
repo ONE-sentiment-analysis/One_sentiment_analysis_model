@@ -15,7 +15,7 @@ RUN pip install --no-cache-dir --upgrade pip && \
 # Baixa as stopwords do NLTK
 RUN python -m nltk.downloader stopwords
 
-# Copia os diretórios (usando a estrutura do seu repo)
+# Copia os diretórios (usando a estrutura deste repositorio)
 COPY src/One_sentiment_API/ ./api/
 COPY src/models/ ./models/
 
