@@ -1,4 +1,3 @@
-import argparse
 import re
 import nltk
 import logging

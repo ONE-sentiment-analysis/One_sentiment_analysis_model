@@ -1,27 +1,27 @@
-# Imagem base oficial do Python
-FROM python:3.9-slim
+FROM python:3.13.11-trixie
 
-# Definir diretório de trabalho no container
 WORKDIR /app
 
-# Instalar dependências
-# Certifique-se de que o requirements.txt
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+# Instala dependências de sistema necessárias para pacotes como scikit-learn
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    && rm -rf /var/lib/apt/lists/*
 
-# Baixar recursos do NLTK (necessário para a limpeza de texto)
+# Copia e instala as dependências
+COPY requirements.txt .
+RUN pip install --no-cache-dir --upgrade pip && \
+    pip install --no-cache-dir -r requirements.txt
+
+# Baixa as stopwords do NLTK
 RUN python -m nltk.downloader stopwords
 
-# Copiar as pastas necessárias
-# Copiamos a pasta da API e a pasta de modelos para o container
+# Copia os diretórios (usando a estrutura do seu repo)
 COPY src/One_sentiment_API/ ./api/
 COPY src/models/ ./models/
 
-# Variável de ambiente para ajudar a API a localizar os modelos
+# Define o caminho de busca do Python
 ENV PYTHONPATH=/app
 
-# Expor a porta que a API utiliza
 EXPOSE 8585
 
-# Comando para rodar a API
 CMD ["python", "api/main.py"]

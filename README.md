@@ -2,6 +2,7 @@
 ![Debian](https://img.shields.io/badge/Debian-D70A53?style=for-the-badge&logo=debian&logoColor=white)
 ![Git](https://img.shields.io/badge/git-%23F05033.svg?style=for-the-badge&logo=git&logoColor=white)
 ![Neovim](https://img.shields.io/badge/NeoVim-%2357A143.svg?&style=for-the-badge&logo=neovim&logoColor=white)
+![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white)
 ![Oracle](https://img.shields.io/badge/Oracle-F80000?style=for-the-badge&logo=oracle&logoColor=white)
 ![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)
 ![NumPy](https://img.shields.io/badge/numpy-%23013243.svg?style=for-the-badge&logo=numpy&logoColor=white)
@@ -106,16 +107,31 @@ Na raiz do projeto execute:
 deactivate
 ```
 
-## API Python - FastAPI
+# API Python - FastAPI
 
-### Como executar a API
+### Como executar a API com Docker (Recomendado)
+Se for a primeira vez, primeiro construa a imagem docker. Na raiz deste projeto execute:
+
+```
+docker build -t analisador-sentimento .
+```
+
+Agora voce pode executar a imagem com:
+
+```
+docker run -p 8585:8585 analisador-sentimento
+```
+
+A API estara ouvindo na porta `8585` por padrao.
+
+### Como executar a API Manualmente
 O diretorio raiz da api se encontra em `/src/One_sentiment_API`. Navegue até este diretorio e execute o seguinte comando para iniciar a API:
 
 ```
 python3 main.py
 ```
 
-### Porta
+## Porta
 Por padrao a API esta configurada para ouvir chamadas na porta `8585`.
 
 Se desejar alterar a porta, altere o atributo `port=` no seguinte arquivo:
@@ -124,7 +140,7 @@ Se desejar alterar a porta, altere o atributo `port=` no seguinte arquivo:
 ./src/One_sentiment_API/main.py
 ```
 
-### Endpoints fornecidos pela API
+## Endpoints fornecidos pela API
 
 #### /api/docs
 Documentacao detalhada da API.
