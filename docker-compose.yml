@@ -1,0 +1,11 @@
+# one_sentiment_analysis_model/docker-compose.yml
+version: '3.8'
+
+services:
+  api-modelo:
+    build: .
+    container_name: api_modelo_container
+    ports:
+      - "8585:8585"
+    networks:
+      - default
